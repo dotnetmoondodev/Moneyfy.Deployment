@@ -1,0 +1,81 @@
+services:
+  expenses-webapi:
+    image: expenses.moneyfy.webapi:latest
+    ports:
+      - 5019:8027
+    links:
+      - sqlserver-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8027
+      - ApiSettings:Key=${Key}
+      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Audience=${Audience}
+      - ApiSettings:DBConnection=${DBConnection}
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  incomes-webapi:
+    image: incomes.moneyfy.webapi:latest
+    ports:
+      - 5089:8028
+    links:
+      - sqlserver-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8028
+      - ApiSettings:Key=${Key}
+      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Audience=${Audience}
+      - ApiSettings:DBConnection=${DBConnection}
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  payments-webapi:
+    image: payments.moneyfy.webapi:latest
+    ports:
+      - 5063:8029
+    links:
+      - sqlserver-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8029
+      - ApiSettings:Key=${Key}
+      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Audience=${Audience}
+      - ApiSettings:DBConnection=${DBConnection}
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  notifications-webapi:
+    image: notifications.moneyfy.webapi:latest
+    ports:
+      - 5244:8030
+    links:
+      - sqlserver-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8030
+      - ApiSettings:Key=${Key}
+      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Audience=${Audience}
+      - ApiSettings:DBConnection=${DBConnection}
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  sqlserver-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DBPassword}
+    volumes:
+      - sqlserverdbdata:/var/opt/mssql
+
+volumes:
+  sqlserverdbdata:

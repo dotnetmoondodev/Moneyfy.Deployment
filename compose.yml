@@ -8,8 +8,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8027
-      - ApiSettings:Key=${Key}
-      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
       - ApiSettings:DBConnection=${DBConnection}
     volumes:
@@ -25,8 +24,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8028
-      - ApiSettings:Key=${Key}
-      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
       - ApiSettings:DBConnection=${DBConnection}
     volumes:
@@ -42,8 +40,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8029
-      - ApiSettings:Key=${Key}
-      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
       - ApiSettings:DBConnection=${DBConnection}
     volumes:
@@ -59,8 +56,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8030
-      - ApiSettings:Key=${Key}
-      - ApiSettings:Issuer=${Issuer}
+      - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
       - ApiSettings:DBConnection=${DBConnection}
     volumes:

@@ -42,6 +42,7 @@ bld/
 [Aa]pplication/
 [Dd]omain/
 [Ee]xpenses.WebApi/
+[Gg]ateway.WebApi/
 [Ii]ncomes.WebApi/
 [Nn]otifications.WebApi/
 [Pp]ayments.WebApi/

@@ -1,4 +1,43 @@
 services:
+  frontend-webapp:
+    image: frontend.moneyfy.webapp:latest
+    ports:
+      - 7103:8031
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8031
+      - AppSettings:BackendServicesUrl=http://gateway-webapi:8010
+      - AppSettings:Authority=${WebAuthority}
+      - AppSettings:ClientId=${WebClientId}
+      - AppSettings:Scope=${WebScope}
+      - Authentication:Schemes:OpenIdConnect:ClientSecret=${WebClientSecret}
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  gateway-webapi:
+    image: gateway.moneyfy.webapi:latest
+    ports:
+      - 5281:8010
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8010
+      - ApiSettings:Authority=${Authority}
+      - ApiSettings:Audience=${Audience}
+      - ApiSettings:MaxWindowSecondsTimeout=${MaxWindowSecondsTimeout}
+      - ApiSettings:MaxPermitCounters=${MaxPermitCounters}
+      - ReverseProxy:Routes:PaymentsRoute:Match:Path=${PaymentsRoute}
+      - ReverseProxy:Routes:NotificationsRoute:Match:Path=${NotificationsRoute}
+      - ReverseProxy:Routes:IncomesRoute:Match:Path=${IncomesRoute}
+      - ReverseProxy:Routes:ExpensesRoute:Match:Path"${ExpensesRoute}
+      - ReverseProxy:Clusters:PaymentsCluster:Destinations:Destination1:Address=http://payments-webapi:8029
+      - ReverseProxy:Clusters:NotificationsCluster:Destinations:Destination1:Address=http://notifications-webapi:8030
+      - ReverseProxy:Clusters:IncomesCluster:Destinations:Destination1:Address=http://incomes-webapi:8028
+      - ReverseProxy:Clusters:ExpensesCluster:Destinations:Destination1:Address=http://expenses-webapi:8027
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
   expenses-webapi:
     image: expenses.moneyfy.webapi:latest
     ports:

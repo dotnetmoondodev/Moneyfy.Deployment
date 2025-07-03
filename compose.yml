@@ -1,6 +1,6 @@
 services:
   frontend-webapp:
-    image: frontend.moneyfy.webapp:latest
+    image: moneyfy.azurecr.io/frontend.moneyfy.webapp:latest
     ports:
       - 7103:8031
     environment:
@@ -16,7 +16,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   gateway-webapi:
-    image: gateway.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/gateway.moneyfy.webapi:latest
     ports:
       - 5281:8010
     environment:
@@ -39,78 +39,78 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   expenses-webapi:
-    image: expenses.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/expenses.moneyfy.webapi:latest
     ports:
       - 5019:8027
     links:
-      - sqlserver-db
+      - mongo-db
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8027
       - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
-      - ApiSettings:DBConnection=${DBConnection}
+      - ApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   incomes-webapi:
-    image: incomes.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/incomes.moneyfy.webapi:latest
     ports:
       - 5089:8028
     links:
-      - sqlserver-db
+      - mongo-db
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8028
       - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
-      - ApiSettings:DBConnection=${DBConnection}
+      - ApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   payments-webapi:
-    image: payments.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/payments.moneyfy.webapi:latest
     ports:
       - 5063:8029
     links:
-      - sqlserver-db
+      - mongo-db
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8029
       - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
-      - ApiSettings:DBConnection=${DBConnection}
+      - ApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   notifications-webapi:
-    image: notifications.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/notifications.moneyfy.webapi:latest
     ports:
       - 5244:8030
     links:
-      - sqlserver-db
+      - mongo-db
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8030
       - ApiSettings:Authority=${Authority}
       - ApiSettings:Audience=${Audience}
-      - ApiSettings:DBConnection=${DBConnection}
+      - ApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
-  sqlserver-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  mongo-db:
+    image: mongo
     ports:
-      - 1433:1433
+      - 27017:27017
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${DBPassword}
+      - MONGO_INITDB_ROOT_USERNAME=${DBUserName}
+      - MONGO_INITDB_ROOT_PASSWORD=${DBUserPass}
     volumes:
-      - sqlserverdbdata:/var/opt/mssql
+      - mongodbdata:/data/db
 
 volumes:
-  sqlserverdbdata:
+  mongodbdata:

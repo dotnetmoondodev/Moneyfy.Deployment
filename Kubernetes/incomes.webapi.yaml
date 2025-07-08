@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incomes-webapi-deployment
+spec:
+  selector:
+    matchLabels:
+      app: incomes-webapi
+  template:
+    metadata:
+      labels:
+        app: incomes-webapi
+    spec:
+      containers:
+        - name: incomes-webapi
+          image: moneyfy.azurecr.io/incomes.moneyfy.webapi:latest
+          env:
+            - name: Authority
+              valueFrom:
+                secretKeyRef:
+                  name: incomes-webapi-secrets
+                  key: authority
+            - name: Audience
+              valueFrom:
+                secretKeyRef:
+                  name: incomes-webapi-secrets
+                  key: audience
+            - name: DBConnection
+              valueFrom:
+                secretKeyRef:
+                  name: incomes-webapi-secrets
+                  key: dbconnection
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+          ports:
+            - containerPort: 8028

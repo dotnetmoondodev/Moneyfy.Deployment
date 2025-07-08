@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-webapi-deployment
+spec:
+  selector:
+    matchLabels:
+      app: payments-webapi
+  template:
+    metadata:
+      labels:
+        app: payments-webapi
+    spec:
+      containers:
+        - name: payments-webapi
+          image: moneyfy.azurecr.io/payments.moneyfy.webapi:latest
+          env:
+            - name: Authority
+              valueFrom:
+                secretKeyRef:
+                  name: payments-webapi-secrets
+                  key: authority
+            - name: Audience
+              valueFrom:
+                secretKeyRef:
+                  name: payments-webapi-secrets
+                  key: audience
+            - name: DBConnection
+              valueFrom:
+                secretKeyRef:
+                  name: payments-webapi-secrets
+                  key: dbconnection
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+          ports:
+            - containerPort: 8029

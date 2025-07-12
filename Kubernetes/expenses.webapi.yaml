@@ -10,26 +10,15 @@ spec:
     metadata:
       labels:
         app: expenses-webapi
+        azure.workload.identity/use: "true"
     spec:
+      serviceAccountName: expenses-webapi-service-account
       containers:
         - name: expenses-webapi
           image: moneyfy.azurecr.io/expenses.moneyfy.webapi:latest
           env:
-            - name: Authority
-              valueFrom:
-                secretKeyRef:
-                  name: expenses-webapi-secrets
-                  key: authority
-            - name: Audience
-              valueFrom:
-                secretKeyRef:
-                  name: expenses-webapi-secrets
-                  key: audience
-            - name: DBConnection
-              valueFrom:
-                secretKeyRef:
-                  name: expenses-webapi-secrets
-                  key: dbconnection
+            - name: ApiSettings__KeyVaultName
+              value: moneyfy
           resources:
             limits:
               memory: "128Mi"
@@ -39,3 +28,36 @@ spec:
               cpu: "150m"
           ports:
             - containerPort: 8027
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8027
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8027
+            initialDelaySeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expenses-webapi-service
+spec:
+  type: ClusterIP
+  selector:
+    app: expenses-webapi
+  ports:
+    - port: 5019
+      targetPort: 8027
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: expenses-webapi-service-account
+  annotations:
+    azure.workload.identity/client-id: f832ec1b-4c2d-469e-bd4b-4bbc20740233 # paste here the correct value of the variable $identity_client_id (see readme.md file)
+  labels:
+    azure.workload.identity/use: "true"

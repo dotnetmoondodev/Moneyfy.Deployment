@@ -1,0 +1,11 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Listener
+metadata:
+  name: moneyfy-http-listener
+spec:
+  port: 5281
+  protocol: HTTP
+  securityModel: XFP # X-Forwarded-Proto
+  hostBinding:
+    namespace:
+      from: SELF

@@ -1,0 +1,9 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Mapping
+metadata:
+  name: moneyfy-mapping
+spec:
+  # here (hostname:) must be set the DNS associated with the emissary-ingress external ip address in the Azure Portal
+  hostname: moneyfy.eastus.cloudapp.azure.com
+  prefix: /expenses/
+  service: expenses-webapi-service.expenses-webapi # the id after the . it corresponding to namespace or selector label of the service

@@ -1,0 +1,11 @@
+apiVersion: cert-manage.io/v1
+kind: Certificate
+metadata:
+  name: moneyfy-tls-cert
+spec:
+  secretName: moneyfy-tls
+  issuerRef:
+    name: letsencrypt-prod # The same name defined in "cluster-issuer.yaml" at "privateKeySecretRef"
+    kind: ClusterIssuer
+  dnsNames:
+    - "moneyfy.eastus.cloudapp.azure.com" # The same hostname defined in "mappings.yaml"

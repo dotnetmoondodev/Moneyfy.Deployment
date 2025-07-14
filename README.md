@@ -276,3 +276,39 @@ $namespace="emissary"
 kubectl apply -f .\Emissary-Ingress\listener.yaml -n $namespace
 kubectl apply -f .\Emissary-Ingress\mappings.yaml -n $namespace
 ```
+
+## To install the Cert Manager
+```powershell
+$namespace="emissary"
+helm repo add jetstack https://charts.jetstack.io --force-update
+helm install cert-manager jetstack/cert-manager --version v1.18.2 --set crds.enabled=true --namespace $namespace
+```
+
+## To create the Cluster Issuer
+```powershell
+$namespace="emissary"
+kubectl apply -f .\Cert-Manager\cluster-issuer.yaml -n $namespace
+kubectl apply -f .\Cert-Manager\acme-challenge.yaml -n $namespace
+```
+
+## To check the Cluster Issuer status
+```powershell
+kubectl get clusterissuer -n $namespace
+```
+
+## To create the TLS Certificate
+```powershell
+kubectl apply -f .\Emissary-Ingress\tls-certificate.yaml -n $namespace
+```
+
+## To check the TLS Certificate status
+```powershell
+kubectl get certificate -n $namespace
+kubectl describe certificate [certificate_name_here] -n $namespace
+```
+
+## To check the Secret created by the TLS Certificate
+```powershell
+kubectl get secret -n $namespace
+kubectl get secret [secret_name_here] -n $namespace -o yaml
+```

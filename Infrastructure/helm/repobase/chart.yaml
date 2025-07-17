@@ -1,0 +1,4 @@
+apiVersion: v2
+name: repobase
+description: Deploys Moneyfy Microservices
+version: 1.0.0

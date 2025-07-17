@@ -1,0 +1,25 @@
+envVariables:
+  ApiSettings__Authority: "[set_the_correct_value_here]"
+  ApiSettings__Audience: "[set_the_correct_value_here]"
+  ApiSettings__DBConnection: "[set_the_correct_value_here]"
+  ApiSettings__KeyVaultName: moneyfy
+
+resources:
+  limits:
+    memory: "128Mi"
+    cpu: "250m"
+  requests:
+    memory: "64Mi"
+    cpu: "150m"
+
+container:
+  liveness:
+    path: /health/live
+    initialDelaySeconds: 10
+  readiness:
+    path: /health/ready
+    initialDelaySeconds: 10
+
+service:
+  type: ClusterIP
+  port: 80

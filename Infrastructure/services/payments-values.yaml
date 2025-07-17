@@ -1,0 +1,16 @@
+microserviceName: "payments-webapi"
+
+image:
+  repository: moneyfy.azurecr.io/payments.moneyfy.webapi
+  tag: latest
+
+resources:
+  limits:
+    memory: "256Mi"
+    cpu: "300m"
+
+container:
+  port: 8029
+
+# For now this is a dummy value, so you must to paste here the correct value of the variable $identity_client_id (see readme.md file)
+identityClientId: f832ec1b-4c2d-469e-bd4b-4bbc20740233

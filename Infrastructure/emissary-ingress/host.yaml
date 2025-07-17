@@ -1,0 +1,10 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Host
+metadata:
+  name: moneyfy-host
+spec:
+  hostname: moneyfy.eastus.cloudapp.azure.com # The same hostname defined in "mappings.yaml"
+  acmeProvider:
+    email: moon.do.dev@gmail.com
+  tlsSecret:
+    name: moneyfy-tls

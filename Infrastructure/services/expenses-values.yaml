@@ -1,0 +1,33 @@
+microserviceName: "expenses-webapi"
+
+image:
+  repository: moneyfy.azurecr.io/expenses.moneyfy.webapi
+  tag: latest
+
+resources:
+  limits:
+    memory: "256Mi"
+    cpu: "300m"
+
+container:
+  port: 8027
+#   volumeMounts: # In case of be neccessary
+#     - name: certificate-volume
+#       mountPath: /certificates
+#
+# volumes: # In case of be neccessary
+#   - name: certificate-volume
+#     secret:
+#       secretName: signing-cert
+#       items:
+#         - key: tls.key
+#           path: certificate.key
+#         - key: tls.crt
+#           path: certificate.crt
+#
+# certificate: # In case of be neccessary
+#   secretName: signing-cert
+#   hostname: moneyfy.eastus.cloudapp.azure.com
+
+# For now this is a dummy value, so you must to paste here the correct value of the variable $identity_client_id (see readme.md file)
+identityClientId: f832ec1b-4c2d-469e-bd4b-4bbc20740233

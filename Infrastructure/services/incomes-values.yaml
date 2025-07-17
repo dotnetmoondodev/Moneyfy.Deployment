@@ -2,7 +2,7 @@ microserviceName: "incomes-webapi"
 
 image:
   repository: moneyfy.azurecr.io/incomes.moneyfy.webapi
-  tag: latest
+  tag: 1.1.0
 
 resources:
   limits:

@@ -1,6 +1,6 @@
 services:
   frontend-webapp:
-    image: moneyfy.azurecr.io/frontend.moneyfy.webapp:latest
+    image: moneyfy.azurecr.io/frontend.moneyfy.webapp:1.1.0
     ports:
       - 7103:8031
     environment:
@@ -16,7 +16,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   gateway-webapi:
-    image: moneyfy.azurecr.io/gateway.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/gateway.moneyfy.webapi:1.1.0
     ports:
       - 5281:8010
     environment:
@@ -30,16 +30,16 @@ services:
       - ReverseProxy:Routes:NotificationsRoute:Match:Path=${NotificationsRoute}
       - ReverseProxy:Routes:IncomesRoute:Match:Path=${IncomesRoute}
       - ReverseProxy:Routes:ExpensesRoute:Match:Path"${ExpensesRoute}
-      - ReverseProxy:Clusters:PaymentsCluster:Destinations:Destination1:Address=http://payments-webapi:8029
-      - ReverseProxy:Clusters:NotificationsCluster:Destinations:Destination1:Address=http://notifications-webapi:8030
-      - ReverseProxy:Clusters:IncomesCluster:Destinations:Destination1:Address=http://incomes-webapi:8028
-      - ReverseProxy:Clusters:ExpensesCluster:Destinations:Destination1:Address=http://expenses-webapi:8027
+      - ReverseProxy:Clusters:PaymentsCluster:Destinations:Destination1:Address=http://payments-webapi:8029/payments
+      - ReverseProxy:Clusters:NotificationsCluster:Destinations:Destination1:Address=http://notifications-webapi:8030/notifications
+      - ReverseProxy:Clusters:IncomesCluster:Destinations:Destination1:Address=http://incomes-webapi:8028/incomes
+      - ReverseProxy:Clusters:ExpensesCluster:Destinations:Destination1:Address=http://expenses-webapi:8027/expenses
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   expenses-webapi:
-    image: moneyfy.azurecr.io/expenses.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/expenses.moneyfy.webapi:1.1.0
     ports:
       - 5019:8027
     links:
@@ -55,7 +55,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   incomes-webapi:
-    image: moneyfy.azurecr.io/incomes.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/incomes.moneyfy.webapi:1.1.0
     ports:
       - 5089:8028
     links:
@@ -71,7 +71,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   payments-webapi:
-    image: moneyfy.azurecr.io/payments.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/payments.moneyfy.webapi:1.1.0
     ports:
       - 5063:8029
     links:
@@ -87,7 +87,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   notifications-webapi:
-    image: moneyfy.azurecr.io/notifications.moneyfy.webapi:latest
+    image: moneyfy.azurecr.io/notifications.moneyfy.webapi:1.1.0
     ports:
       - 5244:8030
     links:

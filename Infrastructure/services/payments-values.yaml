@@ -2,7 +2,7 @@ microserviceName: "payments-webapi"
 
 image:
   repository: moneyfy.azurecr.io/payments.moneyfy.webapi
-  tag: latest
+  tag: 1.1.0
 
 resources:
   limits:

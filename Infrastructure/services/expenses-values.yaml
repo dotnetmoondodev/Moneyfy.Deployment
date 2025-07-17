@@ -2,7 +2,7 @@ microserviceName: "expenses-webapi"
 
 image:
   repository: moneyfy.azurecr.io/expenses.moneyfy.webapi
-  tag: latest
+  tag: 1.1.0
 
 resources:
   limits:

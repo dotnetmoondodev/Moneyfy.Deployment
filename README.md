@@ -12,12 +12,12 @@ dotnet test --logger "html;LogFileName=Moneyfy_TestResults.html" --results-direc
 ## To create Docker images
 ```powershell
 $appname="moneyfy"
-docker build -f gateway.dockerfile -t "$appname.azurecr.io/gateway.moneyfy.webapi:latest" .
-docker build -f expenses.dockerfile -t "$appname.azurecr.io/expenses.moneyfy.webapi:latest" .
-docker build -f incomes.dockerfile -t "$appname.azurecr.io/incomes.moneyfy.webapi:latest" .
-docker build -f payments.dockerfile -t "$appname.azurecr.io/payments.moneyfy.webapi:latest" .
-docker build -f notifications.dockerfile -t "$appname.azurecr.io/notifications.moneyfy.webapi:latest" .
-docker build -f webapp.dockerfile -t "$appname.azurecr.io/frontend.moneyfy.webapp:latest" .
+docker build -f gateway.dockerfile -t "$appname.azurecr.io/gateway.moneyfy.webapi:1.1.0" .
+docker build -f expenses.dockerfile -t "$appname.azurecr.io/expenses.moneyfy.webapi:1.1.0" .
+docker build -f incomes.dockerfile -t "$appname.azurecr.io/incomes.moneyfy.webapi:1.1.0" .
+docker build -f payments.dockerfile -t "$appname.azurecr.io/payments.moneyfy.webapi:1.1.0" .
+docker build -f notifications.dockerfile -t "$appname.azurecr.io/notifications.moneyfy.webapi:1.1.0" .
+docker build -f webapp.dockerfile -t "$appname.azurecr.io/frontend.moneyfy.webapp:1.1.0" .
 ```
 
 ## To create Docker deployment

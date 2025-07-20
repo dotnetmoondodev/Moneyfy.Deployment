@@ -21,9 +21,10 @@ az account set --subscription ["name here"]
 az account show
 ```
 
-### To create/delete the Azure resource group
+### To list/create/delete the Azure resource group
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
+az group list
 az group create --name $appname --location eastus
 az group delete --name $appname
 ```
@@ -47,7 +48,7 @@ az provider register --namespace Microsoft.DocumentDB
 
 ### To create/delete the Cosmos DB instance
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
 az cosmosdb create --name $appname --resource-group $appname --kind MongoDB --enable-free-tier
 az cosmosdb delete --name $appname --resource-group $appname
 ```
@@ -55,7 +56,7 @@ az cosmosdb delete --name $appname --resource-group $appname
 ## Configure the Azure Service Bus
 ### To create the Service Bus Namespace
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
 az servicebus namespace create --name $appname --resource-group $appname --sku Standard # To use masstransit the sku must be "Standard"
 ```
 
@@ -67,14 +68,14 @@ az provider register --namespace Microsoft.ContainerRegistry
 
 ### To create/delete the Azure Container Registry (ACR)
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
 az acr create --name $appname --resource-group $appname --sku Basic
 az acr delete --name $appname --resource-group $appname
 ```
 
 ### To publish a Docker Image to ACR
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
 az acr login --name $appname
 docker tag current_image_name:current_image_tag "$appname.azurecr.io/current_image_name:current_image_tag"
 docker push "$appname.azurecr.io/current_image_name:current_image_tag"
@@ -93,7 +94,7 @@ az vm list-skus
 
 ### To create/delete and connect/delete the AKS Cluster
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
 az aks create -n $appname -g $appname --node-vm-size Standard_B2s --node-count 2 --attach-acr $appname --enable-oidc-issuer --enable-workload-identity --generate-ssh-keys
 az aks get-credentials --name $appname --resource-group $appname
 
@@ -124,7 +125,7 @@ kubectl cluster-info
 
 ### To create the Kubernetes namespace for the secrets and deployments
 ```powershell
-$namespace="expenses-webapi"
+$namespace="service-name"
 kubectl create namespace $namespace
 ```
 
@@ -188,11 +189,12 @@ kubectl get events -n $namespace
 ## Configure the Azure Key Vault to store the Secrets
 ### To create the Azure Key Vault
 ```powershell
-$appname="moneyfy"
-kubectl keyvault create -n $appname -g $appname
+$appname="moneyfy-app"
+az keyvault create -n $appname -g $appname
 ```
 
 ### To create a Secret in the Azure Key Vault
+First, goto the Azure Portal, select the resource group, select the Key Vault, then select Access Control (IAM) and assign the role "Key Vault Administrator" to the Owner user
 ```powershell
 $authority="..."
 $audience="..."
@@ -203,9 +205,11 @@ az keyvault secret set --vault-name $appname --name "ApiSettings--DBConnection" 
 ```
 
 ### To create the Azure Managed Identity and granting the access to the Azure Key Vault
+The last command doesn't work, we have to goto Azure Portal, and assign the role directly to the WebService
 ```powershell
 $namespace="service-name"
-az identify create --resource-group $appname --name $namespace
+az identity create --resource-group $appname --name $namespace
+
 $identity_client_id=az identity show -g $appname -n $namespace --query clientId -otsv
 az keyvault set-policy -n $appname --secret-permissions get list --spn $identity_client_id
 ```
@@ -233,7 +237,7 @@ helm repo update
  
 # Create Namespace and Install:
 $namespace="emissary"
-$appname="moneyfy"
+$appname="moneyfy-app"
 kubectl create namespace $namespace && \
 kubectl apply -f https://app.getambassador.io/yaml/emissary/3.9.1/emissary-crds.yaml
  
@@ -337,7 +341,7 @@ kubectl get all -n $namespace
 ## Configure the Helm Charts (templates) to deploy the Microservices
 ### To deploy a specific microservice with local Helm Charts (repo in .\helm)
 ```powershell
-$namespace="expenses-webapi"
+$namespace="service-name"
 helm install expenses-service .\helm -f .\services\expenses-values.yaml -n $namespace --create-namespace
 ```
 
@@ -355,8 +359,8 @@ kubectl get secrets -n $namespace
 ```powershell
 helm package .\helm\repobase
 
-$appname="moneyfy"
-$chartVersion="1.0.0"
+$appname="moneyfy-app"
+$chartVersion="1.0.2"
 $helmUser=[guid]::Empty.Guid
 $helmPass=az acr login --name $appname --expose-token --output tsv --query accessToken
 
@@ -366,18 +370,35 @@ helm push .\repobase-$chartVersion.tgz oci://$appname.azurecr.io/helm
 
 ### To deploy a specific microservice with remote Helm Charts (repo in ACR)
 ```powershell
-$appname="moneyfy"
-$chartVersion="1.0.0"
+$appname="moneyfy-app"
+$chartVersion="1.0.2"
 $helmUser=[guid]::Empty.Guid
 $helmPass=az acr login --name $appname --expose-token --output tsv --query accessToken
 
 helm registry login "$appname.azurecr.io" --username $helmUser --password $helmPass
 
-$namespace="expenses-webapi"
+$namespace="service-name"
 helm upgrade expenses-service oci://$appname.azurecr.io/helm/repobase --version $chartVersion -f .\services\expenses-values.yaml -n $namespace --install # You can use the --debug parameter in case of presenting issues
+```
+
+### To check the Pod's logs
+```powershell
+kubectl logs [pod_name_here] --previous -n $namespace
 ```
 
 ### To update/refresh the Helm Charts
 ```powershell
 helm repo update
+```
+
+## To stop and start the AKS Cluster
+```powershell
+$appname="moneyfy-app"
+az aks stop --name $appname --resource-group $appname
+az aks start --name $appname --resource-group $appname 
+```
+
+## To remove all resources from the Azure Subscription
+```powershell
+az resource delete --ids $(az resource list --query "[].id" -o tsv)
 ```

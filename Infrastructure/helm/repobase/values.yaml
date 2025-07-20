@@ -1,8 +1,5 @@
 envVariables:
-  ApiSettings__Authority: "[set_the_correct_value_here]"
-  ApiSettings__Audience: "[set_the_correct_value_here]"
-  ApiSettings__DBConnection: "[set_the_correct_value_here]"
-  ApiSettings__KeyVaultName: moneyfy
+  ApiSettings__KeyVaultName: moneyfy-app
 
 resources:
   limits:

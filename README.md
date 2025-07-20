@@ -5,13 +5,9 @@
 dotnet test --logger "html;LogFileName=Moneyfy_TestResults.html" --results-directory ./UnitTests/Reports/
 ```
 
-> [!IMPORTANT]
-> To update the Database executing the previous commands, remember to set the **DBConnection** param in the **appsettings.json** file, for each WebApi project. 
-> 
-
 ## To create Docker images
 ```powershell
-$appname="moneyfy"
+$appname="moneyfy-app"
 docker build -f gateway.dockerfile -t "$appname.azurecr.io/gateway.moneyfy.webapi:1.1.0" .
 docker build -f expenses.dockerfile -t "$appname.azurecr.io/expenses.moneyfy.webapi:1.1.0" .
 docker build -f incomes.dockerfile -t "$appname.azurecr.io/incomes.moneyfy.webapi:1.1.0" .

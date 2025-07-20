@@ -49,15 +49,17 @@ az provider register --namespace Microsoft.DocumentDB
 ### To create/delete the Cosmos DB instance
 ```powershell
 $appname="moneyfy-app"
-az cosmosdb create --name $appname --resource-group $appname --kind MongoDB --enable-free-tier
-az cosmosdb delete --name $appname --resource-group $appname
+$grpname="moneyfy-grp"
+az cosmosdb create --name $appname --resource-group $grpname --kind MongoDB --enable-free-tier
+az cosmosdb delete --name $appname --resource-group $grpname
 ```
 
 ## Configure the Azure Service Bus
 ### To create the Service Bus Namespace
 ```powershell
 $appname="moneyfy-app"
-az servicebus namespace create --name $appname --resource-group $appname --sku Standard # To use masstransit the sku must be "Standard"
+$grpname="moneyfy-grp"
+az servicebus namespace create --name $appname --resource-group $grpname --sku Standard # To use masstransit the sku must be "Standard"
 ```
 
 ## Configure the Azure Container Registry (ACR)
@@ -69,8 +71,9 @@ az provider register --namespace Microsoft.ContainerRegistry
 ### To create/delete the Azure Container Registry (ACR)
 ```powershell
 $appname="moneyfy-app"
-az acr create --name $appname --resource-group $appname --sku Basic
-az acr delete --name $appname --resource-group $appname
+$grpname="moneyfy-grp"
+az acr create --name $appname --resource-group $grpname --sku Basic
+az acr delete --name $appname --resource-group $grpname
 ```
 
 ### To publish a Docker Image to ACR
@@ -95,21 +98,22 @@ az vm list-skus
 ### To create/delete and connect/delete the AKS Cluster
 ```powershell
 $appname="moneyfy-app"
-az aks create -n $appname -g $appname --node-vm-size Standard_B2s --node-count 2 --attach-acr $appname --enable-oidc-issuer --enable-workload-identity --generate-ssh-keys
-az aks get-credentials --name $appname --resource-group $appname
+$grpname="moneyfy-grp"
+az aks create -n $appname -g $grpname --node-vm-size Standard_B2s --node-count 2 --attach-acr $appname --enable-oidc-issuer --enable-workload-identity --generate-ssh-keys
+az aks get-credentials --name $appname --resource-group $grpname
 
 az aks list -o table 
-az aks delete -n $appname -g $appname
+az aks delete -n $appname -g $grpname
 ```
 
 ### To upgrade the AKS Cluster
 ```powershell
-az aks upgrade -g $appname -n $appname --kubernetes-version [new_version_number_here]
+az aks upgrade -g $grpname -n $appname --kubernetes-version [new_version_number_here]
 ```
 
 ### To scale the AKS Cluster
 ```powershell
-az aks scale -g $appname -n $appname --agent-count [number_of_instances_here]
+az aks scale -g $grpname -n $appname --agent-count [number_of_instances_here]
 ```
 
 ## Configure the Azure Kubernetes CLI (kubectl)
@@ -190,7 +194,8 @@ kubectl get events -n $namespace
 ### To create the Azure Key Vault
 ```powershell
 $appname="moneyfy-app"
-az keyvault create -n $appname -g $appname
+$grpname="moneyfy-grp"
+az keyvault create -n $appname -g $grpname
 ```
 
 ### To create a Secret in the Azure Key Vault
@@ -208,17 +213,17 @@ az keyvault secret set --vault-name $appname --name "ApiSettings--DBConnection" 
 The last command doesn't work, we have to goto Azure Portal, and assign the role directly to the WebService
 ```powershell
 $namespace="service-name"
-az identity create --resource-group $appname --name $namespace
+az identity create --resource-group $grpname --name $namespace
 
-$identity_client_id=az identity show -g $appname -n $namespace --query clientId -otsv
+$identity_client_id=az identity show -g $grpname -n $namespace --query clientId -otsv
 az keyvault set-policy -n $appname --secret-permissions get list --spn $identity_client_id
 ```
 
 ### To establish the Federated Identity Credential
 ```powershell
 $namespace="service-name"
-$aks_oidc_issuer=az aks show -n $appname -g $appname --query "oidcIssuerProfile.issuerUrl" -otsv
-az identity federated-credential create --name $namespace --identity-name $namespace --resource-group $appname --issuer $aks_oidc_issuer --subject "system:serviceaccount:${namespace}:${namespace}-service-account"
+$aks_oidc_issuer=az aks show -n $appname -g $grpname --query "oidcIssuerProfile.issuerUrl" -otsv
+az identity federated-credential create --name $namespace --identity-name $namespace --resource-group $grpname --issuer $aks_oidc_issuer --subject "system:serviceaccount:${namespace}:${namespace}-service-account"
 ```
 
 ## Configure the Emissary Ingress as API Gateway
@@ -360,7 +365,7 @@ kubectl get secrets -n $namespace
 helm package .\helm\repobase
 
 $appname="moneyfy-app"
-$chartVersion="1.0.2"
+$chartVersion="1.0.0"
 $helmUser=[guid]::Empty.Guid
 $helmPass=az acr login --name $appname --expose-token --output tsv --query accessToken
 
@@ -371,7 +376,7 @@ helm push .\repobase-$chartVersion.tgz oci://$appname.azurecr.io/helm
 ### To deploy a specific microservice with remote Helm Charts (repo in ACR)
 ```powershell
 $appname="moneyfy-app"
-$chartVersion="1.0.2"
+$chartVersion="1.0.0"
 $helmUser=[guid]::Empty.Guid
 $helmPass=az acr login --name $appname --expose-token --output tsv --query accessToken
 
@@ -394,8 +399,9 @@ helm repo update
 ## To stop and start the AKS Cluster
 ```powershell
 $appname="moneyfy-app"
-az aks stop --name $appname --resource-group $appname
-az aks start --name $appname --resource-group $appname 
+$grpname="moneyfy-grp"
+az aks stop --name $appname --resource-group $grpname
+az aks start --name $appname --resource-group $grpname
 ```
 
 ## To remove all resources from the Azure Subscription

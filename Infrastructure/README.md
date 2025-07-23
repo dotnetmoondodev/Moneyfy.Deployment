@@ -203,10 +203,12 @@ First, goto the Azure Portal, select the resource group, select the Key Vault, t
 ```powershell
 $authority="..."
 $audience="..."
-$dbconnection="..."
-az keyvault secret set --vault-name $appname --name "ApiSettings--Authority" --value $authority
-az keyvault secret set --vault-name $appname --name "ApiSettings--Audience" --value $audience
-az keyvault secret set --vault-name $appname --name "ApiSettings--DBConnection" --value $dbconnection
+$mongodbconn="..."
+$seqsrvconn=".."
+az keyvault secret set --vault-name $appname --name "WebApiSettings--Authority" --value $authority
+az keyvault secret set --vault-name $appname --name "WebApiSettings--Audience" --value $audience
+az keyvault secret set --vault-name $appname --name "WebApiSettings--DBConnection" --value $mongodbconn
+az keyvault secret set --vault-name $appname --name "WebApiSettings--SeqConnection" --value $seqsrvconn
 ```
 
 ### To create the Azure Managed Identity and granting the access to the Azure Key Vault
@@ -407,4 +409,31 @@ az aks start --name $appname --resource-group $grpname
 ## To remove all resources from the Azure Subscription
 ```powershell
 az resource delete --ids $(az resource list --query "[].id" -o tsv)
+```
+
+## Create GitHub service principal
+```powershell
+$appId = az ad sp create-for-rbac -n "GitHub" --skip-assignment --query appId --output tsv
+
+az role assignment create --assignee $appId --role "AcrPush" --resource-group $appname
+az role assignment create --assignee $appId --role "Azure Kubernetes Service Cluster User Role" --resource-group $appname
+az role assignment create --assignee $appId --role "Azure Kubernetes Service Contributor Role" --resource-group $appname
+```
+
+## Deploying Seq to AKS
+```powershell
+helm repo add datalust https://helm.datalust.co
+helm repo update
+
+helm install seq datalust/seq -n observability --create-namespace
+kubectl get pods -n observability
+```
+
+## Apply the Seq service mapping
+```powershell
+$namespace="emissary"
+kubectl apply -f .\emissary-ingress\mappings.yaml -n $namespace
+
+# To check if the Seq Server on Azure is working, goto the following url:
+# https://moneyfy-app.eastus.cloudapp.azure.com/seq/
 ```

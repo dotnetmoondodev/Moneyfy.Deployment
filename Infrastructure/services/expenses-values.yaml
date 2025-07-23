@@ -1,7 +1,7 @@
 microserviceName: "expenses-webapi"
 
 image:
-  repository: moneyfy.azurecr.io/expenses.moneyfy.webapi
+  repository: moneyfy-app.azurecr.io/expenses.moneyfy.webapi
   tag: 1.1.0
 
 resources:
@@ -27,7 +27,7 @@ container:
 #
 # certificate: # In case of be neccessary
 #   secretName: signing-cert
-#   hostname: moneyfy.eastus.cloudapp.azure.com
+#   hostname: moneyfy-app.eastus.cloudapp.azure.com
 
 # For now this is a dummy value, so you must to paste here the correct value of the variable $identity_client_id (see readme.md file)
 identityClientId: f832ec1b-4c2d-469e-bd4b-4bbc20740233

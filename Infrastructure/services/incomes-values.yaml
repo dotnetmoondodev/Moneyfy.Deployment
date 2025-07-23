@@ -1,7 +1,7 @@
 microserviceName: "incomes-webapi"
 
 image:
-  repository: moneyfy.azurecr.io/incomes.moneyfy.webapi
+  repository: moneyfy-app.azurecr.io/incomes.moneyfy.webapi
   tag: 1.1.0
 
 resources:

@@ -8,4 +8,4 @@ spec:
     name: letsencrypt-prod # The same name defined in "cluster-issuer.yaml" at "privateKeySecretRef"
     kind: ClusterIssuer
   dnsNames:
-    - "moneyfy.eastus.cloudapp.azure.com" # The same hostname defined in "mappings.yaml"
+    - "moneyfy-app.eastus.cloudapp.azure.com" # The same hostname defined in "mappings.yaml"

@@ -1,5 +1,5 @@
 envVariables:
-  ApiSettings__KeyVaultName: moneyfy-app
+  WebApiSettings__KeyVaultName: moneyfy-app
 
 resources:
   limits:

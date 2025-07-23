@@ -16,7 +16,7 @@ metadata:
   name: acme-challenge-mapping
 spec:
   # here (hostname:) must be set the DNS associated with the emissary-ingress external ip address in the Azure Portal
-  hostname: moneyfy.eastus.cloudapp.azure.com
+  hostname: moneyfy-app.eastus.cloudapp.azure.com
   prefix: /.well-known/acme-challenge/
   rewrite: ""
   service: acme-challenge-service

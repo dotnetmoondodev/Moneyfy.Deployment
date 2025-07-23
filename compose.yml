@@ -1,6 +1,6 @@
 services:
   frontend-webapp:
-    image: moneyfy-app.azurecr.io/frontend.moneyfy.webapp:1.1.0
+    image: moneyfy-app.azurecr.io/frontend.moneyfy.webapp:1.1.1
     container_name: moneyfy-frontend
     ports:
       - 7103:8031
@@ -17,7 +17,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   gateway-webapi:
-    image: moneyfy-app.azurecr.io/gateway.moneyfy.webapi:1.1.0
+    image: moneyfy-app.azurecr.io/gateway.moneyfy.webapi:1.1.1
     container_name: moneyfy-gateway
     ports:
       - 5281:8010
@@ -42,7 +42,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   expenses-webapi:
-    image: moneyfy-app.azurecr.io/expenses.moneyfy.webapi:1.1.0
+    image: moneyfy-app.azurecr.io/expenses.moneyfy.webapi:1.1.1
     container_name: moneyfy-expenses
     ports:
       - 5019:8027
@@ -61,7 +61,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   incomes-webapi:
-    image: moneyfy-app.azurecr.io/incomes.moneyfy.webapi:1.1.0
+    image: moneyfy-app.azurecr.io/incomes.moneyfy.webapi:1.1.1
     container_name: moneyfy-incomes
     ports:
       - 5089:8028
@@ -80,7 +80,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   payments-webapi:
-    image: moneyfy-app.azurecr.io/payments.moneyfy.webapi:1.1.0
+    image: moneyfy-app.azurecr.io/payments.moneyfy.webapi:1.1.1
     container_name: moneyfy-payments
     ports:
       - 5063:8029
@@ -99,7 +99,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   notifications-webapi:
-    image: moneyfy-app.azurecr.io/notifications.moneyfy.webapi:1.1.0
+    image: moneyfy-app.azurecr.io/notifications.moneyfy.webapi:1.1.1
     container_name: moneyfy-notifications
     ports:
       - 5244:8030

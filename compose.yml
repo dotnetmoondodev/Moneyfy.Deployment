@@ -24,6 +24,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8010
+      - GatewaySettings:ServiceName=Gateway-WebApi
       - GatewaySettings:Authority=${Authority}
       - GatewaySettings:Audience=${Audience}
       - GatewaySettings:MaxWindowSecondsTimeout=${MaxWindowSecondsTimeout}
@@ -51,11 +52,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8027
+      - WebApiSettings:ServiceName=Expenses-WebApi
       - WebApiSettings:Authority=${Authority}
       - WebApiSettings:Audience=${Audience}
       - WebApiSettings:KeyVaultName=${KeyVaultName}
       - WebApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
       - WebApiSettings:SeqServerUrl=http://seq-server:5341
+      - WebApiSettings:JaegerServerUrl=http://jaeger-server:4318
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
@@ -70,11 +73,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8028
+      - WebApiSettings:ServiceName=Incomes-WebApi
       - WebApiSettings:Authority=${Authority}
       - WebApiSettings:Audience=${Audience}
       - WebApiSettings:KeyVaultName=${KeyVaultName}
       - WebApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
       - WebApiSettings:SeqServerUrl=http://seq-server:5341
+      - WebApiSettings:JaegerServerUrl=http://jaeger-server:4318
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
@@ -89,11 +94,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8029
+      - WebApiSettings:ServiceName=Payments-WebApi
       - WebApiSettings:Authority=${Authority}
       - WebApiSettings:Audience=${Audience}
       - WebApiSettings:KeyVaultName=${KeyVaultName}
       - WebApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
       - WebApiSettings:SeqServerUrl=http://seq-server:5341
+      - WebApiSettings:JaegerServerUrl=http://jaeger-server:4318
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
@@ -108,11 +115,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8030
+      - WebApiSettings:ServiceName=Notifications-WebApi
       - WebApiSettings:Authority=${Authority}
       - WebApiSettings:Audience=${Audience}
       - WebApiSettings:KeyVaultName=${KeyVaultName}
       - WebApiSettings:DBConnection=mongodb://${DBUserName}:${DBUserPass}@mongo-db:27017
       - WebApiSettings:SeqServerUrl=http://seq-server:5341
+      - WebApiSettings:JaegerServerUrl=http://jaeger-server:4318
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
@@ -139,6 +148,18 @@ services:
       - 80:80
     volumes:
       - seqdata:/data
+
+  jaeger-server:
+    image: jaegertracing/all-in-one
+    container_name: moneyfy-jaeger
+    ports:
+      - 4318:4318
+      - 5775:5775/udp
+      - 5778:5778
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 16686:16686
+      - 16687:16687
 
 volumes:
   mongodbdata:

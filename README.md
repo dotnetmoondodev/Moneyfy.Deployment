@@ -28,12 +28,13 @@ dotnet ef database update NotificationTables -p ..\Persistence\Persistence.cspro
 $env:GH_OWNER="dotnetmoondodev"
 $env:GH_PAT="[PAT HERE]"
 $appname="moneyfy-app"
-docker build --secret id=GH_OWNER --secret id=GH_PAT -f gateway.dockerfile -t "$appname.azurecr.io/gateway.moneyfy.webapi:1.2.5" .
-docker build --secret id=GH_OWNER --secret id=GH_PAT -f expenses.dockerfile -t "$appname.azurecr.io/expenses.moneyfy.webapi:1.2.5" .
-docker build --secret id=GH_OWNER --secret id=GH_PAT -f incomes.dockerfile -t "$appname.azurecr.io/incomes.moneyfy.webapi:1.2.5" .
-docker build --secret id=GH_OWNER --secret id=GH_PAT -f payments.dockerfile -t "$appname.azurecr.io/payments.moneyfy.webapi:1.2.5" .
-docker build --secret id=GH_OWNER --secret id=GH_PAT -f notifications.dockerfile -t "$appname.azurecr.io/notifications.moneyfy.webapi:1.2.5" .
-docker build --secret id=GH_OWNER --secret id=GH_PAT -f webapp.dockerfile -t "$appname.azurecr.io/frontend.moneyfy.webapp:1.2.5" .
+$imgtag="1.2.6"
+docker build --secret id=GH_OWNER --secret id=GH_PAT -f gateway.dockerfile -t "$appname.azurecr.io/gateway.moneyfy.webapi:$imgtag" .
+docker build --secret id=GH_OWNER --secret id=GH_PAT -f expenses.dockerfile -t "$appname.azurecr.io/expenses.moneyfy.webapi:$imgtag" .
+docker build --secret id=GH_OWNER --secret id=GH_PAT -f incomes.dockerfile -t "$appname.azurecr.io/incomes.moneyfy.webapi:$imgtag" .
+docker build --secret id=GH_OWNER --secret id=GH_PAT -f payments.dockerfile -t "$appname.azurecr.io/payments.moneyfy.webapi:$imgtag" .
+docker build --secret id=GH_OWNER --secret id=GH_PAT -f notifications.dockerfile -t "$appname.azurecr.io/notifications.moneyfy.webapi:$imgtag" .
+docker build --secret id=GH_OWNER --secret id=GH_PAT -f webapp.dockerfile -t "$appname.azurecr.io/frontend.moneyfy.webapp:$imgtag" .
 ```
 
 ## To create Docker deployment
